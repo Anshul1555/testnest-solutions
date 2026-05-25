@@ -515,23 +515,34 @@ Then('they should land on the secure dashboard viewport', async function () {
           {/* Glass IDE Wrapper */}
           <div className="glass-card rounded-3xl overflow-hidden border border-slate-200/50 shadow-xl bg-white max-w-4xl mx-auto">
             {/* Editor Top Bar */}
-            <div className="bg-[#EAEFF4] px-6 py-3.5 flex items-center justify-between border-b border-slate-200/60 font-sans">
-              <div className="flex items-center space-x-2">
-                {/* Simulated window circles */}
-                <div className="h-3 w-3 rounded-full bg-red-400" />
-                <div className="h-3 w-3 rounded-full bg-yellow-400" />
-                <div className="h-3 w-3 rounded-full bg-emerald-400" />
-                <span className="pl-4 text-xs font-bold text-slate-500 font-mono flex items-center gap-1.5">
-                  <FileCode className="w-3.5 h-3.5 text-indigo-500" />
-                  {codeBlocks[activeCodeTab].fileName}
-                </span>
+            <div className="bg-[#EAEFF4] px-4 py-3 md:px-6 md:py-3.5 flex flex-col md:flex-row items-stretch md:items-center justify-between border-b border-slate-200/60 font-sans gap-3">
+              <div className="flex items-center justify-between md:justify-start">
+                <div className="flex items-center space-x-2">
+                  {/* Simulated window circles */}
+                  <div className="h-3 w-3 rounded-full bg-red-400 shrink-0" />
+                  <div className="h-3 w-3 rounded-full bg-yellow-400 shrink-0" />
+                  <div className="h-3 w-3 rounded-full bg-emerald-400 shrink-0" />
+                  <span className="pl-3 text-xs font-bold text-slate-500 font-mono flex items-center gap-1.5 shrink-0">
+                    <FileCode className="w-3.5 h-3.5 text-indigo-500" />
+                    {codeBlocks[activeCodeTab].fileName}
+                  </span>
+                </div>
+                
+                {/* Copy Btn for Mobile (visible inline on mobile) */}
+                <button
+                  onClick={handleCopyCode}
+                  className="p-1.5 md:hidden text-slate-400 hover:text-indigo-600 bg-white shadow-sm border border-slate-200/40 rounded-lg cursor-pointer transition-colors duration-200"
+                  title="Copy code to clipboard"
+                >
+                  {copiedCode ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                </button>
               </div>
               
-              {/* Selector Tabs */}
-              <div className="flex items-center space-x-2">
+              {/* Selector Tabs (Scrollable on mobile) */}
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth flex-nowrap justify-start max-w-full pb-1 md:pb-0">
                 <button
                   onClick={() => setActiveCodeTab('feature')}
-                  className={`px-3 py-1 text-xs font-bold rounded-lg cursor-pointer transition-all duration-200 ${
+                  className={`px-3 py-1.5 md:py-1 text-[11px] md:text-xs font-bold rounded-lg cursor-pointer transition-all duration-200 shrink-0 ${
                     activeCodeTab === 'feature' 
                       ? 'bg-white text-indigo-600 shadow-sm border border-indigo-100/30' 
                       : 'text-slate-500 hover:text-slate-700'
@@ -541,7 +552,7 @@ Then('they should land on the secure dashboard viewport', async function () {
                 </button>
                 <button
                   onClick={() => setActiveCodeTab('page')}
-                  className={`px-3 py-1 text-xs font-bold rounded-lg cursor-pointer transition-all duration-200 ${
+                  className={`px-3 py-1.5 md:py-1 text-[11px] md:text-xs font-bold rounded-lg cursor-pointer transition-all duration-200 shrink-0 ${
                     activeCodeTab === 'page' 
                       ? 'bg-white text-indigo-600 shadow-sm border border-indigo-100/30' 
                       : 'text-slate-500 hover:text-slate-700'
@@ -551,7 +562,7 @@ Then('they should land on the secure dashboard viewport', async function () {
                 </button>
                 <button
                   onClick={() => setActiveCodeTab('step')}
-                  className={`px-3 py-1 text-xs font-bold rounded-lg cursor-pointer transition-all duration-200 ${
+                  className={`px-3 py-1.5 md:py-1 text-[11px] md:text-xs font-bold rounded-lg cursor-pointer transition-all duration-200 shrink-0 ${
                     activeCodeTab === 'step' 
                       ? 'bg-white text-indigo-600 shadow-sm border border-indigo-100/30' 
                       : 'text-slate-500 hover:text-slate-700'
@@ -560,10 +571,10 @@ Then('they should land on the secure dashboard viewport', async function () {
                   LoginSteps.java (Java Steps)
                 </button>
                 
-                {/* Copy Btn */}
+                {/* Copy Btn for Desktop */}
                 <button
                   onClick={handleCopyCode}
-                  className="p-1.5 ml-2 text-slate-400 hover:text-indigo-600 bg-white shadow-sm border border-slate-200/40 rounded-lg cursor-pointer transition-colors duration-200"
+                  className="hidden md:block p-1.5 ml-2 text-slate-400 hover:text-indigo-600 bg-white shadow-sm border border-slate-200/40 rounded-lg cursor-pointer transition-colors duration-200 shrink-0"
                   title="Copy code to clipboard"
                 >
                   {copiedCode ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
@@ -572,8 +583,8 @@ Then('they should land on the secure dashboard viewport', async function () {
             </div>
             
             {/* Editor Code Snippet */}
-            <div className="p-6 md:p-8 bg-slate-50 text-left overflow-x-auto font-mono text-xs md:text-sm leading-relaxed border-b border-slate-200/40">
-              <pre className="text-slate-700">
+            <div className="p-4 md:p-8 bg-slate-50 text-left overflow-x-auto font-mono text-[11px] md:text-sm leading-relaxed border-b border-slate-200/40">
+              <pre className="text-slate-700 min-w-max">
                 <code>
                   {codeBlocks[activeCodeTab].code.split('\n').map((line, lIdx) => {
                     const isGherkin = activeCodeTab === 'feature';
@@ -585,12 +596,12 @@ Then('they should land on the secure dashboard viewport', async function () {
                       const parts = line.split(regex);
                       
                       return (
-                        <div key={lIdx} className="flex">
-                          <span className="w-8 select-none text-slate-300 text-right pr-4 font-mono font-medium text-[10px] md:text-xs">{lIdx + 1}</span>
+                        <div key={lIdx} className="flex min-w-max whitespace-pre">
+                          <span className="w-8 select-none text-slate-300 text-right pr-4 font-mono font-medium text-[10px] md:text-xs shrink-0">{lIdx + 1}</span>
                           <span className="flex-grow">
                             {parts.map((part, pIdx) => {
                               if (gherkinKeywords.includes(part) || part.endsWith(':')) {
-                                return <span key={pIdx} className="text-purple-600 font-bold">{part}</span>;
+                                  return <span key={pIdx} className="text-purple-600 font-bold">{part}</span>;
                               }
                               if (part.startsWith('"') && part.endsWith('"')) {
                                 return <span key={pIdx} className="text-teal-600 font-medium">{part}</span>;
@@ -607,8 +618,8 @@ Then('they should land on the secure dashboard viewport', async function () {
                       // Java highlight tokenizer
                       if (line.trim().startsWith('//')) {
                         return (
-                          <div key={lIdx} className="flex">
-                            <span className="w-8 select-none text-slate-300 text-right pr-4 font-mono font-medium text-[10px] md:text-xs">{lIdx + 1}</span>
+                          <div key={lIdx} className="flex min-w-max whitespace-pre">
+                            <span className="w-8 select-none text-slate-300 text-right pr-4 font-mono font-medium text-[10px] md:text-xs shrink-0">{lIdx + 1}</span>
                             <span className="text-slate-400 font-medium">{line}</span>
                           </div>
                         );
@@ -619,8 +630,8 @@ Then('they should land on the secure dashboard viewport', async function () {
                       const parts = line.split(regex);
                       
                       return (
-                        <div key={lIdx} className="flex">
-                          <span className="w-8 select-none text-slate-300 text-right pr-4 font-mono font-medium text-[10px] md:text-xs">{lIdx + 1}</span>
+                        <div key={lIdx} className="flex min-w-max whitespace-pre">
+                          <span className="w-8 select-none text-slate-300 text-right pr-4 font-mono font-medium text-[10px] md:text-xs shrink-0">{lIdx + 1}</span>
                           <span className="flex-grow">
                             {parts.map((part, pIdx) => {
                               if (javaKeywords.includes(part)) {
@@ -1061,24 +1072,13 @@ Then('they should land on the secure dashboard viewport', async function () {
             <p className="text-sm font-medium text-slate-600 leading-relaxed max-w-md mx-auto">
               TestNest Solutions Inc. will build a modular, isolated automation workflow mapping exactly to your release parameters.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex items-center justify-center pt-2">
               <button 
                 onClick={onOpenAuditModal}
                 className="btn btn-primary px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md cursor-pointer text-sm w-full sm:w-auto"
               >
                 Request Pipeline Audit &rarr;
               </button>
-              <a 
-                href="https://www.linkedin.com/in/anshul1555/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-secondary inline-flex items-center justify-center gap-2 px-8 py-3 border border-slate-200 hover:border-indigo-300 hover:text-indigo-600 text-slate-700 font-bold rounded-xl shadow-sm hover:shadow-md cursor-pointer text-sm bg-white transition-all duration-300 w-full sm:w-auto"
-              >
-                <svg className="w-4 h-4 fill-indigo-600" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
-                Direct LinkedIn Contact
-              </a>
             </div>
           </motion.div>
         </section>
