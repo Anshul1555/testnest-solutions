@@ -125,9 +125,7 @@ ${name}
             onClick={() => { setCurrentPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             className="flex items-center gap-2 text-xl font-extrabold text-slate-900 tracking-tight cursor-pointer hover:opacity-90"
           >
-            <span className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-600 to-cyan-500 text-white flex items-center justify-center shadow-md">
-              🪹
-            </span>
+            <img src="./logo.png" className="h-8 w-8 object-contain rounded-lg shadow-sm" alt="TestNest Logo" />
             <span>TestNest</span>
           </button>
           
@@ -212,7 +210,7 @@ ${name}
               <div className="space-y-8 text-left">
                 <div className="flex justify-between items-center pb-4 border-b border-slate-100">
                   <span className="flex items-center gap-2 text-lg font-extrabold text-slate-900">
-                    <span className="h-7 w-7 rounded-lg bg-gradient-to-br from-indigo-600 to-cyan-500 text-white flex items-center justify-center shadow-md">🪹</span>
+                    <img src="./logo.png" className="h-7 w-7 object-contain rounded-md" alt="TestNest Logo" />
                     TestNest
                   </span>
                   <button onClick={() => setIsMobileMenuOpen(false)} className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
@@ -392,7 +390,7 @@ ${name}
           {/* Brand block */}
           <div className="lg:col-span-5 space-y-4">
             <div className="flex items-center gap-2 text-xl font-extrabold text-white tracking-tight">
-              <span className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-600 to-cyan-500 text-white flex items-center justify-center shadow-md">🪹</span>
+              <img src="./logo.png" className="h-8 w-8 object-contain rounded-lg" alt="TestNest Logo" />
               <span>TestNest Solutions Inc.</span>
             </div>
             <p className="text-sm font-medium text-slate-500 leading-relaxed max-w-sm">
