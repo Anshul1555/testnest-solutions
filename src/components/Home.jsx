@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import ThreeHero from './ThreeHero';
 import { 
   Shield, Activity, Play, ChevronRight, MousePointerClick, 
   Terminal, Cpu, Network, Smartphone, RefreshCw, 
@@ -42,6 +43,33 @@ const RollingCounter = ({ value, suffix = '', duration = 1.5 }) => {
   const displayVal = target % 1 === 0 ? Math.floor(count).toLocaleString() : count.toFixed(1);
   return <span>{displayVal}{suffix}</span>;
 };
+
+// 3D tilt card component
+function TiltCard({ children, className }) {
+  const ref = useRef(null);
+  const onMouseMove = useCallback((e) => {
+    const el = ref.current;
+    if (!el) return;
+    const { left, top, width, height } = el.getBoundingClientRect();
+    const x = (e.clientX - left) / width - 0.5;
+    const y = (e.clientY - top) / height - 0.5;
+    el.style.transform = `perspective(700px) rotateY(${x * 14}deg) rotateX(${-y * 14}deg) scale3d(1.03,1.03,1.03)`;
+  }, []);
+  const onMouseLeave = useCallback(() => {
+    if (ref.current) ref.current.style.transform = 'perspective(700px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)';
+  }, []);
+  return (
+    <div
+      ref={ref}
+      className={className}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+      style={{ transition: 'transform 0.15s ease-out', willChange: 'transform' }}
+    >
+      {children}
+    </div>
+  );
+}
 
 export default function Home({ onOpenAuditModal, setActiveTab, onCopy, copiedState }) {
   // Service array definitions
@@ -141,22 +169,24 @@ export default function Home({ onOpenAuditModal, setActiveTab, onCopy, copiedSta
   return (
     <div className="pt-24 pb-16">
       {/* ==================== 1. HERO SECTION ==================== */}
-      <section className="relative px-6 py-12 md:py-20 lg:py-24 overflow-hidden">
-        {/* Glow Effects */}
-        <div className="absolute top-1/4 right-0 w-80 h-80 rounded-full bg-indigo-200/40 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-10 left-0 w-72 h-72 rounded-full bg-cyan-200/40 blur-[100px] pointer-events-none" />
+      <section className="relative px-6 py-12 md:py-20 lg:py-24 overflow-hidden bg-slate-950 rounded-3xl mx-4 mb-2 shadow-2xl">
+        {/* Three.js 3D background */}
+        <ThreeHero />
+        {/* Gradient overlay to keep text readable */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent pointer-events-none" style={{zIndex:1}} />
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-950/80 to-transparent pointer-events-none" style={{zIndex:1}} />
         
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative" style={{zIndex:2}}>
           {/* Left Block */}
           <div className="lg:col-span-7 flex flex-col items-start space-y-6 text-left">
-            <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-100/80 border border-indigo-200/50">
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-indigo-300 bg-indigo-900/60 border border-indigo-500/40 backdrop-blur-sm">
               🇨🇦 CANADA-BASED COMPANY · MANUAL & AUTOMATION TESTING
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
               We Hunt <br className="hidden md:inline" />
-              <span className="bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">Every Bug.</span>
+              <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-cyan-400 bg-clip-text text-transparent">Every Bug.</span>
             </h1>
-            <p className="text-lg md:text-xl font-medium text-slate-600 max-w-lg leading-relaxed">
+            <p className="text-lg md:text-xl font-medium text-slate-300 max-w-lg leading-relaxed">
               TestNest Solutions Inc. delivers precision QA — manual expertise meets intelligent automation — so your product ships flawlessly.
             </p>
             <div className="flex flex-wrap items-center gap-4 pt-2">
@@ -166,9 +196,9 @@ export default function Home({ onOpenAuditModal, setActiveTab, onCopy, copiedSta
               >
                 Start Free Audit &rarr;
               </button>
-              <a 
-                href="#services" 
-                className="text-slate-700 hover:text-indigo-600 font-bold text-sm tracking-wide flex items-center gap-1 group transition-colors duration-200"
+              <a
+                href="#services"
+                className="text-slate-300 hover:text-indigo-400 font-bold text-sm tracking-wide flex items-center gap-1 group transition-colors duration-200"
               >
                 See Our Work 
                 <ChevronRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200" />
@@ -176,17 +206,17 @@ export default function Home({ onOpenAuditModal, setActiveTab, onCopy, copiedSta
             </div>
           </div>
           
-          {/* Right Block: Floating 8D glass dashboard */}
+          {/* Right Block: Floating glass dashboard */}
           <div className="lg:col-span-5 w-full">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: 'easeOut' }}
-              className="glass-card w-full rounded-3xl p-6 md:p-8 flex flex-col space-y-6 relative glow-indigo"
+              className="w-full rounded-3xl p-6 md:p-8 flex flex-col space-y-6 relative bg-slate-900/70 border border-indigo-500/30 backdrop-blur-md shadow-2xl shadow-indigo-500/20"
             >
               {/* Card top branding */}
-              <div className="flex justify-between items-center pb-4 border-b border-slate-200/40">
-                <span className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-indigo-600">
+              <div className="flex justify-between items-center pb-4 border-b border-slate-700/60">
+                <span className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-indigo-400">
                   <Shield className="w-4 h-4 animate-pulse" />
                   QA Core Dashboard
                 </span>
@@ -197,26 +227,26 @@ export default function Home({ onOpenAuditModal, setActiveTab, onCopy, copiedSta
               <div className="grid grid-cols-2 gap-x-6 gap-y-8">
                 {/* coverage */}
                 <div className="flex flex-col space-y-1">
-                  <span className="text-3xl font-extrabold text-slate-800 font-sans tracking-tight">
+                  <span className="text-3xl font-extrabold text-white font-sans tracking-tight">
                     <RollingCounter value={100} suffix="%" />
                   </span>
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Test Coverage</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Test Coverage</span>
                 </div>
                 
                 {/* bugs */}
                 <div className="flex flex-col space-y-1">
-                  <span className="text-3xl font-extrabold text-slate-800 font-sans tracking-tight text-indigo-600">
+                  <span className="text-3xl font-extrabold text-indigo-400 font-sans tracking-tight">
                     <RollingCounter value={10000} suffix="+" />
                   </span>
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Bugs Caught</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bugs Caught</span>
                 </div>
                 
                 {/* releases */}
                 <div className="flex flex-col space-y-1">
-                  <span className="text-3xl font-extrabold text-slate-800 font-sans tracking-tight">
+                  <span className="text-3xl font-extrabold text-white font-sans tracking-tight">
                     <RollingCounter value={5} suffix="x" />
                   </span>
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Faster Releases</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Faster Releases</span>
                 </div>
                 
                 {/* bugs prod */}
@@ -225,7 +255,7 @@ export default function Home({ onOpenAuditModal, setActiveTab, onCopy, copiedSta
                     0
                     <Shield className="w-5 h-5 fill-emerald-100 text-emerald-600" />
                   </span>
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Bugs To Prod</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bugs To Prod</span>
                 </div>
               </div>
               
@@ -259,11 +289,7 @@ export default function Home({ onOpenAuditModal, setActiveTab, onCopy, copiedSta
           {/* Services Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((item, idx) => (
-              <motion.div 
-                key={idx}
-                whileHover={{ y: -6, scale: 1.01 }}
-                className={`glass-card p-8 rounded-3xl flex flex-col items-start text-left border border-slate-200/30 bg-gradient-to-br ${item.bg} hover:shadow-lg transition-all duration-300 relative overflow-hidden group`}
-              >
+              <TiltCard key={idx} className={`glass-card p-8 rounded-3xl flex flex-col items-start text-left border border-slate-200/30 bg-gradient-to-br ${item.bg} hover:shadow-xl transition-all duration-300 relative overflow-hidden group`}>
                 <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-200/10 rounded-full blur-2xl transform translate-x-4 -translate-y-4 group-hover:scale-125 transition-transform duration-300" />
                 
                 <div className="flex justify-between items-center w-full mb-6">
@@ -290,7 +316,7 @@ export default function Home({ onOpenAuditModal, setActiveTab, onCopy, copiedSta
                     </span>
                   ))}
                 </div>
-              </motion.div>
+              </TiltCard>
             ))}
           </div>
         </div>
