@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Shield, Activity, Play, ChevronRight, MousePointerClick, 
+  Shield, Activity, Play, ChevronRight, ChevronDown, MousePointerClick, 
   Terminal, Cpu, Network, Smartphone, RefreshCw, 
   Phone, Mail, MapPin, Copy, Check, ExternalLink,
-  Coins, ShieldCheck, ShoppingBag
+  Coins, ShieldCheck, ShoppingBag, HelpCircle
 } from 'lucide-react';
 
 // --- Dynamic Counter Helper Component ---
@@ -138,6 +138,37 @@ export default function Home({ onOpenAuditModal, setActiveTab, onCopy, copiedSta
     }
   ];
 
+  // Interactive FAQ state and data matching Schema.org FAQPage
+  const [openFaq, setOpenFaq] = useState(0);
+  const toggleFaq = (idx) => setOpenFaq(prev => prev === idx ? null : idx);
+
+  const faqs = [
+    {
+      question: "What software testing services does TestNest Solutions Inc. provide?",
+      answer: "TestNest Solutions provides full-cycle Quality Assurance services including Manual QA Testing (exploratory, regression, functional, UAT), Automated Testing Engineering (Cypress, Playwright, Selenium), Performance & Load Stress Testing (Apache JMeter), API & Integration Testing (Postman collections), and CI/CD Quality Pipeline Integration (Jenkins)."
+    },
+    {
+      question: "Which test automation frameworks and languages do you specialize in?",
+      answer: "We specialize in modern, high-speed test automation frameworks including Cypress, Microsoft Playwright, and Selenium WebDriver. Our frameworks are engineered using Page Object Model (POM) and Cucumber BDD architecture written in TypeScript, JavaScript, Java, and Python."
+    },
+    {
+      question: "How does TestNest integrate automated testing into CI/CD pipelines?",
+      answer: "We configure automated quality gates directly inside Jenkins, GitHub Actions, and GitLab CI. Every pull request or release branch triggers headless test runs, generating instant test execution reports and blocking regressions before production."
+    },
+    {
+      question: "Is TestNest Solutions based in Canada, and do you work with international clients?",
+      answer: "Yes, TestNest Solutions Inc. is proudly based in Ontario, Canada. We partner with tech startups, scaleups, and enterprise businesses across Canada, the United States, and globally."
+    },
+    {
+      question: "What is included in the Free QA & Test Automation Audit?",
+      answer: "Our free 30-minute QA audit assesses your current software testing coverage, identifies critical test automation gaps, benchmarks web performance, and delivers an actionable roadmap to achieve zero-bug release cycles."
+    },
+    {
+      question: "How quickly can TestNest onboard and begin testing our software?",
+      answer: "Our engineers can onboard within 24 to 48 hours. We integrate with your existing Jira, GitHub, and communication channels (Slack/Teams) to begin exploratory audits and automated test suite scaffolding immediately."
+    }
+  ];
+
   return (
     <div className="pt-24 pb-16">
       {/* ==================== 1. HERO SECTION ==================== */}
@@ -155,9 +186,12 @@ export default function Home({ onOpenAuditModal, setActiveTab, onCopy, copiedSta
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
               We Hunt <br className="hidden md:inline" />
               <span className="bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">Every Bug.</span>
+              <span className="block text-xl md:text-2xl font-bold text-slate-700 mt-3 font-sans tracking-normal">
+                Premier QA Automation &amp; Software Testing Services in Canada
+              </span>
             </h1>
             <p className="text-lg md:text-xl font-medium text-slate-600 max-w-lg leading-relaxed">
-              TestNest Solutions Inc. delivers precision QA — manual expertise meets intelligent automation — so your product ships flawlessly.
+              <strong>TestNest Solutions Inc.</strong> delivers precision Quality Assurance &mdash; manual expertise meets intelligent automated test pipelines, ensuring zero-bug releases for web and enterprise applications.
             </p>
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <button 
@@ -249,10 +283,10 @@ export default function Home({ onOpenAuditModal, setActiveTab, onCopy, copiedSta
               Complete QA Arsenal
             </span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight">
-              What We Offer
+              Comprehensive Software Testing &amp; QA Services
             </h2>
             <p className="text-slate-600 font-medium leading-relaxed">
-              Precision testing across all components of your technology suite. We offer unified, sprint-aligned quality benchmarks.
+              What We Offer &mdash; Precision testing across all components of your technology suite. We offer unified, sprint-aligned quality benchmarks.
             </p>
           </div>
           
@@ -471,8 +505,49 @@ export default function Home({ onOpenAuditModal, setActiveTab, onCopy, copiedSta
         </div>
       </section>
 
-      {/* ==================== 5. CONTACT / ABOUT CTA SECTION ==================== */}
-      <section className="py-20 px-6 bg-slate-50">
+      {/* ==================== 5. FREQUENTLY ASKED QUESTIONS (FAQ) ==================== */}
+      <section className="py-20 px-6 bg-white border-b border-slate-200/50" id="faq">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-14 space-y-3">
+            <span className="inline-block px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase text-indigo-700 bg-indigo-50 border border-indigo-100">
+              Clear Answers
+            </span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-slate-600 font-bold text-sm uppercase tracking-wide">
+              Everything you need to know about our QA &amp; Software Testing solutions
+            </p>
+          </div>
+
+          <div className="space-y-4 text-left">
+            {faqs.map((faq, idx) => (
+              <div 
+                key={idx}
+                className="glass-card rounded-2xl border border-slate-200/50 bg-slate-50/50 overflow-hidden transition-all duration-200 hover:border-indigo-200"
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleFaq(idx)}
+                  className="w-full px-6 py-5 flex items-center justify-between text-left font-bold text-slate-800 hover:text-indigo-600 cursor-pointer transition-colors duration-200"
+                  aria-expanded={openFaq === idx}
+                >
+                  <span className="text-base md:text-lg pr-4">{faq.question}</span>
+                  <ChevronDown className={`w-5 h-5 text-indigo-500 shrink-0 transform transition-transform duration-200 ${openFaq === idx ? 'rotate-180' : ''}`} />
+                </button>
+                {openFaq === idx && (
+                  <div className="px-6 pb-6 pt-1 text-sm md:text-base font-medium text-slate-600 leading-relaxed border-t border-slate-200/30">
+                    <p>{faq.answer}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== 6. CONTACT / ABOUT CTA SECTION ==================== */}
+      <section className="py-20 px-6 bg-slate-50" id="contact">
         <div className="max-w-4xl mx-auto">
           <motion.div 
             whileHover={{ scale: 1.01 }}

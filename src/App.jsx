@@ -31,6 +31,65 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // URL Hash synchronization & deep-linking for direct subpage discovery
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (['automation', 'manual', 'reporting'].includes(hash)) {
+        setCurrentPage(hash);
+      } else if (['services', 'process', 'faq', 'contact', 'home', ''].includes(hash)) {
+        setCurrentPage('home');
+        if (hash && hash !== 'home') {
+          setTimeout(() => {
+            const el = document.getElementById(hash);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }, 150);
+        }
+      }
+    };
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
+
+  // Dynamic SEO Title and Meta Description update per active view
+  useEffect(() => {
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (currentPage === 'automation') {
+      document.title = 'QA Automation Services | Cypress, Playwright & Selenium | TestNest Solutions Inc.';
+      if (metaDesc) {
+        metaDesc.setAttribute('content', 'Enterprise test automation engineering by TestNest Solutions Inc. Decoupled 5-layer BDD architecture with Cypress, Playwright, and Selenium.');
+      }
+      if (window.location.hash !== '#automation') {
+        window.history.replaceState(null, '', '#automation');
+      }
+    } else if (currentPage === 'manual') {
+      document.title = 'Manual QA Testing Services | Functional, Regression & UAT | TestNest Solutions Inc.';
+      if (metaDesc) {
+        metaDesc.setAttribute('content', 'Precision manual QA testing services by TestNest Solutions Inc. Exploratory, functional, regression, and user acceptance testing with Gherkin traceability.');
+      }
+      if (window.location.hash !== '#manual') {
+        window.history.replaceState(null, '', '#manual');
+      }
+    } else if (currentPage === 'reporting') {
+      document.title = 'QA Metrics & Test Reporting Dashboards | TestNest Solutions Inc.';
+      if (metaDesc) {
+        metaDesc.setAttribute('content', 'Unified QA reporting & test metrics by TestNest Solutions Inc. Executive quality dashboards, CI/CD pipeline analytics, and zero-leak release assurance.');
+      }
+      if (window.location.hash !== '#reporting') {
+        window.history.replaceState(null, '', '#reporting');
+      }
+    } else {
+      document.title = 'TestNest Solutions Inc. | Top Software Testing & QA Automation Services Canada';
+      if (metaDesc) {
+        metaDesc.setAttribute('content', 'TestNest Solutions Inc. delivers premier Software Testing & QA Automation in Canada. Manual testing, Cypress, Playwright, Selenium, JMeter, Postman & CI/CD Jenkins integration for zero-bug releases.');
+      }
+      if (['#automation', '#manual', '#reporting'].includes(window.location.hash)) {
+        window.history.replaceState(null, '', '#');
+      }
+    }
+  }, [currentPage]);
+
   // Copy to clipboard tool
   const handleCopyText = (text, type) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -125,7 +184,7 @@ ${name}
             onClick={() => { setCurrentPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             className="flex items-center gap-2 text-xl font-extrabold text-slate-900 tracking-tight cursor-pointer hover:opacity-90"
           >
-            <img src="./logo.png" className="h-8 w-8 object-contain rounded-lg shadow-sm" alt="TestNest Logo" />
+            <img src="./logo-64.png" width="32" height="32" className="h-8 w-8 object-contain rounded-lg shadow-sm" alt="TestNest Solutions Inc. Logo" />
             <span>TestNest</span>
           </button>
           
@@ -133,6 +192,7 @@ ${name}
           <nav className="hidden md:flex items-center space-x-8">
             <button onClick={() => handleNavClick('services')} className="text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-indigo-600 transition-colors duration-200 cursor-pointer">SERVICES</button>
             <button onClick={() => handleNavClick('process')} className="text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-indigo-600 transition-colors duration-200 cursor-pointer">PROCESS</button>
+            <button onClick={() => handleNavClick('faq')} className="text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-indigo-600 transition-colors duration-200 cursor-pointer">FAQ</button>
             <button onClick={() => handleNavClick('contact')} className="text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-indigo-600 transition-colors duration-200 cursor-pointer">CONTACT</button>
             
             {/* Page tabs */}
@@ -210,7 +270,7 @@ ${name}
               <div className="space-y-8 text-left">
                 <div className="flex justify-between items-center pb-4 border-b border-slate-100">
                   <span className="flex items-center gap-2 text-lg font-extrabold text-slate-900">
-                    <img src="./logo.png" className="h-7 w-7 object-contain rounded-md" alt="TestNest Logo" />
+                    <img src="./logo-64.png" width="28" height="28" className="h-7 w-7 object-contain rounded-md" alt="TestNest Solutions Inc. Logo" />
                     TestNest
                   </span>
                   <button onClick={() => setIsMobileMenuOpen(false)} className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
@@ -221,6 +281,7 @@ ${name}
                 <nav className="flex flex-col space-y-4">
                   <button onClick={() => handleNavClick('services')} className="text-sm font-bold uppercase tracking-wider text-slate-600 hover:text-indigo-600 text-left py-2 border-b border-slate-50">Services</button>
                   <button onClick={() => handleNavClick('process')} className="text-sm font-bold uppercase tracking-wider text-slate-600 hover:text-indigo-600 text-left py-2 border-b border-slate-50">Process</button>
+                  <button onClick={() => handleNavClick('faq')} className="text-sm font-bold uppercase tracking-wider text-slate-600 hover:text-indigo-600 text-left py-2 border-b border-slate-50">FAQ</button>
                   <button onClick={() => handleNavClick('contact')} className="text-sm font-bold uppercase tracking-wider text-slate-600 hover:text-indigo-600 text-left py-2 border-b border-slate-50">Contact</button>
                   <button 
                     onClick={() => { setIsMobileMenuOpen(false); setCurrentPage('automation'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
@@ -390,7 +451,7 @@ ${name}
           {/* Brand block */}
           <div className="lg:col-span-5 space-y-4">
             <div className="flex items-center gap-2 text-xl font-extrabold text-white tracking-tight">
-              <img src="./logo.png" className="h-8 w-8 object-contain rounded-lg" alt="TestNest Logo" />
+              <img src="./logo-64.png" width="32" height="32" className="h-8 w-8 object-contain rounded-lg" alt="TestNest Solutions Inc. Logo" />
               <span>TestNest Solutions Inc.</span>
             </div>
             <p className="text-sm font-medium text-slate-500 leading-relaxed max-w-sm">
@@ -404,9 +465,11 @@ ${name}
             <ul className="space-y-2.5 text-sm font-medium">
               <li><button onClick={() => handleNavClick('services')} className="hover:text-white transition-colors duration-200 cursor-pointer">SERVICES</button></li>
               <li><button onClick={() => handleNavClick('process')} className="hover:text-white transition-colors duration-200 cursor-pointer">PROCESS</button></li>
+              <li><button onClick={() => handleNavClick('faq')} className="hover:text-white transition-colors duration-200 cursor-pointer">FAQ</button></li>
               <li><button onClick={() => { setCurrentPage('automation'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white transition-colors duration-200 cursor-pointer">AUTOMATION</button></li>
               <li><button onClick={() => { setCurrentPage('manual'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white transition-colors duration-200 cursor-pointer">MANUAL</button></li>
               <li><button onClick={() => { setCurrentPage('reporting'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white transition-colors duration-200 cursor-pointer">REPORTING</button></li>
+              <li><button onClick={() => handleNavClick('contact')} className="hover:text-white transition-colors duration-200 cursor-pointer">CONTACT</button></li>
             </ul>
           </div>
           

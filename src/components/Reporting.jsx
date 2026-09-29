@@ -106,7 +106,10 @@ at com.testnest.specs.LoginVisualTest.verifySubmitAction(login-responsive.spec.j
           </span>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-800 leading-tight">
             Unified Quality <br />
-            <span className="bg-gradient-to-r from-indigo-600 to-cyan-500 bg-clip-text text-transparent">Intelligence & Reporting</span>
+            <span className="bg-gradient-to-r from-indigo-600 to-cyan-500 bg-clip-text text-transparent">Intelligence &amp; Reporting</span>
+            <span className="block text-xl md:text-2xl font-bold text-slate-600 mt-3 font-sans tracking-normal">
+              Test Coverage Metrics &amp; Defect Analytics Dashboards
+            </span>
           </h1>
           <p className="text-base md:text-lg font-medium text-slate-600 leading-relaxed">
             Translating granular automated pipeline runs and analytical human exploratory logs into clean, executive-ready dashboards.

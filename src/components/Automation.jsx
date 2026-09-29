@@ -307,8 +307,11 @@ Then('they should land on the secure dashboard viewport', async function () {
             Engineering Department
           </span>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-800 leading-tight">
-            Scalable & Robust <br />
+            Scalable &amp; Robust <br />
             <span className="bg-gradient-to-r from-indigo-600 to-cyan-500 bg-clip-text text-transparent">Automation Engineering</span>
+            <span className="block text-xl md:text-2xl font-bold text-slate-600 mt-3 font-sans tracking-normal">
+              Enterprise Cypress, Playwright &amp; Selenium Test Frameworks
+            </span>
           </h1>
           <p className="text-base md:text-lg font-medium text-slate-600 leading-relaxed">
             Building dynamic, zero-flake regression suites that seamlessly integrate into modern enterprise CI/CD pipelines.

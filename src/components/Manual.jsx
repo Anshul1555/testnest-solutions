@@ -65,6 +65,9 @@ export default function Manual({ onOpenAuditModal }) {
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-800 leading-tight">
             Human Intelligence. <br />
             <span className="bg-gradient-to-r from-indigo-600 to-cyan-500 bg-clip-text text-transparent">Analytical Precision.</span>
+            <span className="block text-xl md:text-2xl font-bold text-slate-600 mt-3 font-sans tracking-normal">
+              Manual QA Testing, Exploratory &amp; User Acceptance Testing (UAT)
+            </span>
           </h1>
           <p className="text-base md:text-lg font-medium text-slate-600 leading-relaxed">
             Because automated scripts only check what they are told to see. We think like users and break things with purpose.
