@@ -1,0 +1,27 @@
+{
+  "name": "TestNest Solutions Inc. - Precision QA & Automated Testing",
+  "short_name": "TestNest QA",
+  "description": "Canada-based IT Quality Assurance & Automated Software Testing company delivering zero-bug releases.",
+  "start_url": "/testnest-solutions/",
+  "scope": "/testnest-solutions/",
+  "display": "standalone",
+  "background_color": "#F4F7FA",
+  "theme_color": "#4F46E5",
+  "icons": [
+    {
+      "src": "./favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "./android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

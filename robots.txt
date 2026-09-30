@@ -1,0 +1,8 @@
+# TestNest Solutions Inc. - Robots Configuration
+# Allow all search engine crawlers (Google, Bing, Yahoo, DuckDuckGo, etc.)
+User-agent: *
+Allow: /
+
+# Host & Sitemap specification
+Host: https://anshul1555.github.io
+Sitemap: https://anshul1555.github.io/testnest-solutions/sitemap.xml
